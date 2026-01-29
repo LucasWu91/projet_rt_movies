@@ -1,0 +1,39 @@
+services:
+  mongo:
+    image: mongo:8
+    container_name: rt2025_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  scraper:
+    build: ./scraper
+    container_name: rt2025_scraper
+    depends_on:
+      - mongo
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017
+      - MONGODB_DB=rt2025
+      - MONGODB_COLLECTION=movies
+      - SEED_URL=https://editorial.rottentomatoes.com/guide/best-2025-movies-every-certified-fresh/
+      - MAX_MOVIES=1000
+    command: ["python", "-m", "scrapy", "crawl", "movies_2025", "-L", "INFO"]
+    restart: "no"
+
+  dashboard:
+    build: ./dashboard
+    container_name: rt2025_dashboard
+    depends_on:
+      - mongo
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017
+      - MONGODB_DB=rt2025
+      - MONGODB_COLLECTION=movies
+    ports:
+      - "8050:8050"
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+
