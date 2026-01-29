@@ -1,0 +1,7 @@
+scrapy
+pymongo
+python-dotenv
+pandas
+dash
+plotly
+

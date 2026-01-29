@@ -1,0 +1,16 @@
+BOT_NAME = "rt2025"
+
+SPIDER_MODULES = ["rt2025.spiders"]
+NEWSPIDER_MODULE = "rt2025.spiders"
+
+ROBOTSTXT_OBEY = True
+
+DOWNLOAD_DELAY = 1.0
+AUTOTHROTTLE_ENABLED = True
+
+ITEM_PIPELINES = {
+    "rt2025.pipelines.MongoPipeline": 300,
+}
+
+LOG_LEVEL = "INFO"
+
