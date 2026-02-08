@@ -1,299 +1,133 @@
-# 🎬 RT2025 — Scraper Rotten Tomatoes + Dashboard interactif
+#  Scraping des films Rotten Tomatoes 2025 & Dashboard interactif
 
-## 📌 Présentation du projet
+##  Présentation du projet
 
-Ce projet a pour objectif de construire une chaîne complète de traitement de données autour des films Rotten Tomatoes 2025, en respectant les contraintes suivantes :
+Ce projet a été réalisé dans le cadre du module de Data Engineering.
+L’objectif était de construire une chaîne complète de traitement de données, depuis la récupération des informations sur un site web jusqu’à leur visualisation dans une application web.
 
-* Scraper un site web réel
-* Stocker les données dans une base de données
-* Créer une application web de visualisation
-* Conteneuriser l’ensemble avec Docker
-* Fournir une documentation technique et fonctionnelle
+Pour cela, j’ai choisi de travailler sur le site Rotten Tomatoes en récupérant les films sortis en 2025 ainsi que leurs scores critiques et spectateurs.
 
-Le projet simule un mini pipeline de data engineering complet, de la collecte à la visualisation.
+Le projet repose sur trois étapes principales :
+scraper les données, les stocker dans une base de données, puis les afficher via un dashboard interactif.
 
 ---
 
-# 🧠 Architecture globale
+##  Démarche et choix techniques
 
-Le système repose sur 3 services principaux :
+J’ai utilisé Scrapy pour réaliser le scraping car il permet de structurer proprement le code et de parcourir facilement un grand nombre de pages.
+Le spider récupère d’abord la liste des films 2025, puis visite chaque page individuelle afin d’extraire les informations importantes comme le titre, le score critique (Tomatometer) et le score des spectateurs (Audience Score).
 
-1. Scraper (Scrapy)
-   → récupère les données sur Rotten Tomatoes
+Les données sont ensuite stockées dans une base MongoDB.
+Ce choix s’est imposé naturellement car MongoDB est très bien adapté aux données issues du web scraping, qui sont souvent semi-structurées et évolutives.
 
-2. MongoDB
-   → stocke les données
+Pour la partie visualisation, j’ai développé une application web en Python avec Flask.
+Le backend se connecte à MongoDB pour récupérer les données et les transmettre au frontend, qui affiche des graphiques et une liste des films.
 
-3. Dashboard (Flask + JS)
-   → lit la base et affiche les résultats
-
-Flux de données :
-
-Scrapy → MongoDB → Flask API → Frontend (JS)
+Enfin, l’ensemble du projet a été conteneurisé avec Docker afin de pouvoir être lancé facilement sur n’importe quelle machine.
 
 ---
 
-# ⚙️ Choix techniques
+##  Architecture du projet
 
-## 🕷️ Scraping : Scrapy
+Le projet fonctionne selon un flux simple :
 
-Choisi car :
+Le scraper collecte les données → les enregistre dans MongoDB → le dashboard lit la base → les données sont affichées dans l’interface web.
 
-* Plus robuste que BeautifulSoup
-* Gestion native des pipelines
-* Gestion des délais (anti-ban)
-* Architecture propre (spiders / pipelines)
+Trois conteneurs sont utilisés :
 
-Le scraper :
-
-* Récupère la liste des films 2025
-* Visite chaque page
-* Extrait :
-
-  * titre
-  * tomatometer
-  * audience score
-  * URL
+* MongoDB (base de données)
+* Scraper (Scrapy)
+* Dashboard (Flask + JavaScript)
 
 ---
 
-## 🗄️ Base de données : MongoDB
+##  Comment lancer le projet
 
-Choisi car :
-
-* Adapté aux données semi-structurées
-* Simple à connecter avec Python
-* Facile à utiliser en Docker
-* Flexible pour évoluer
-
-Collection utilisée :
-
-movies
-
----
-
-## 🌐 Backend : Flask
-
-Choisi car :
-
-* Léger
-* Rapide à mettre en place
-* Parfait pour exposer une API locale
-* Idéal pour projets académiques
-
-Rôle :
-
-* Se connecter à MongoDB
-* Fournir les données au frontend
-
----
-
-## 🎨 Frontend : HTML / CSS / JavaScript
-
-Le frontend :
-
-* Appelle l’API Flask
-* Affiche :
-
-  * Graphiques
-  * Statistiques
-  * Liste des films
-
-Librairie graphique utilisée :
-Chart.js
-
----
-
-## 🐳 Conteneurisation : Docker
-
-Docker permet :
-
-* D’éviter les conflits de versions
-* De reproduire le projet facilement
-* De lancer tous les services ensemble
-
-Conteneurs :
-
-* mongo
-* scraper
-* dashboard
-
----
-
-# 🚀 Comment lancer le projet
-
-## 1) Prérequis
-
-Installer :
-
-* Docker Desktop
-* Git
-
----
-
-## 2) Lancement
-
-À la racine du projet :
+Une fois Docker installé, il suffit de se placer à la racine du projet et d’exécuter :
 
 docker compose up --build
 
-Cela démarre automatiquement :
+Cette commande lance automatiquement :
 
-* MongoDB
-* Le scraper
-* Le dashboard
+* la base de données
+* le scraping
+* l’application web
 
----
-
-## 3) Accès à l’application
-
-Ouvrir :
+L’interface est ensuite accessible à l’adresse :
 
 [http://127.0.0.1:8050](http://127.0.0.1:8050)
 
 ---
 
-# 🗃️ Vérifier les données
+##  Résultats obtenus
 
-Ouvrir MongoDB :
+Le dashboard constitue la seconde partie centrale du projet. Il exploite directement les données collectées par le spider afin de produire des visualisations interactives permettant d’analyser les films sortis en 2025.
 
-docker exec -it rt2025_mongo mongosh
+### Fonctionnement technique
 
-Puis :
+**Connexion à la base de données**
+L’application web se connecte automatiquement à la même base MongoDB que celle utilisée par le scraper. Elle récupère les films stockés dans la collection `movies`, contenant notamment le titre, le score critique et le score spectateur.
 
-use rt2025
-db.movies.countDocuments()
+**Récupération et traitement des données**
+Les données sont extraites depuis MongoDB puis organisées et triées afin de pouvoir être utilisées pour les visualisations. Les films sont notamment analysés selon leurs scores critiques (Tomatometer) et leurs scores spectateurs (Audience Score).
 
----
+**Création des visualisations**
+Plusieurs graphiques sont générés à partir des données récupérées. Le dashboard permet notamment d’afficher :
 
-# 📊 Fonctionnalités du dashboard
+* la distribution des scores critiques sous forme d’histogramme,
+* la distribution des scores spectateurs,
+* une vue globale permettant de comparer la perception des films par la critique et par le public.
 
-## Page "Vue d’ensemble"
+Ces graphiques offrent une lecture rapide et intuitive des tendances sur les films de 2025.
 
-* Statistiques globales
+**Interface utilisateur**
+L’interface web permet de naviguer facilement entre différentes vues :
 
-## Page "Graphiques"
+* une page d’aperçu général,
+* des graphiques statistiques,
+* une liste des films scrapés.
 
-* Distribution Tomatometer
-* Distribution Audience Score
+Les données sont chargées dynamiquement depuis le backend, ce qui permet une mise à jour automatique si la base MongoDB évolue.
 
-## Page "Films"
-
-* Liste complète des films scrapés
-
----
-
-# ⚠️ Difficultés rencontrées
-
-## 1) Scraping dynamique
-
-Problème :
-
-* Rotten Tomatoes charge certaines données dynamiquement
-
-Solution :
-
-* Scraper les pages individuelles des films
+**Exécution de l’application**
+L’application fonctionne via un serveur web local lancé dans un conteneur Docker. L’utilisateur peut ainsi accéder aux visualisations directement depuis son navigateur et interagir avec les données collectées.
 
 ---
 
-## 2) Connexion MongoDB entre conteneurs
+## ️ Difficultés rencontrées
 
-Problème :
+L’une des principales difficultés a été liée au scraping du site Rotten Tomatoes.
+Certaines informations ne sont pas directement visibles dans le HTML classique et sont intégrées sous forme de données structurées. Il a fallu explorer la page en détail pour trouver les bonnes variables à extraire.
 
-* Le dashboard ne voyait pas les données
+Un autre problème important concernait la connexion entre les conteneurs Docker et MongoDB.
+Au départ, l’application n’arrivait pas à récupérer les données car elle tentait de se connecter à "localhost".
+La solution a été d’utiliser le nom du service Docker ("mongo") comme adresse de connexion.
 
-Cause :
-
-* Mauvaise URL MongoDB
-
-Solution :
-
-Utiliser :
-
-mongodb://mongo:27017
-
-au lieu de :
-
-localhost
+J’ai également rencontré un souci où les données étaient bien présentes dans la base mais n’apparaissaient pas dans le dashboard.
+Cela venait d’une mauvaise configuration de la connexion entre le backend Flask et MongoDB.
 
 ---
 
-## 3) Problème de port Flask
+##  Améliorations possibles
 
-Problème :
+Le projet pourrait être enrichi de plusieurs façons :
 
-* Flask tournait sur 5000
-* Docker exposait 8050
-
-Solution :
-
-* Faire écouter Flask sur 8050
+* ajouter un moteur de recherche par film
+* ajouter des filtres par score
+* scraper d’autres années
+* ajouter des statistiques comparatives plus avancées
 
 ---
 
-## 4) Données visibles dans Mongo mais pas dans l’app
+##  Conclusion
 
-Problème :
+Ce projet m’a permis de mettre en pratique plusieurs compétences importantes en data engineering :
 
-* Le frontend ne récupérait rien
+* scraping de données web
+* manipulation de bases NoSQL
+* création d’API backend
+* visualisation de données
+* conteneurisation avec Docker
 
-Cause :
-
-* Mauvaise connexion backend → Mongo
-
-Solution :
-
-* Corriger les variables d’environnement
-
----
-
-## 5) Gestion des bins graphiques
-
-Problème :
-
-* Le graphique affichait "80–100" deux fois
-
-Solution :
-
-* Créer un bin spécifique pour "100 uniquement"
-
----
-
-# 📈 Résultat
-
-Le projet permet maintenant :
-
-✔ Scraper automatiquement tous les films
-✔ Stocker 200+ films en base
-✔ Visualiser les données en temps réel
-✔ Déployer en un seul docker compose
-
----
-
-# 🧩 Améliorations possibles
-
-* Recherche par titre
-* Filtres par score
-* Mise à jour automatique quotidienne
-* Ajout d’autres années
-* Export CSV
-
----
-
-# 🏁 Conclusion
-
-Ce projet met en place une chaîne complète de traitement de données :
-
-Scraping → Stockage → API → Visualisation
-
-Il couvre des compétences clés :
-
-* Data scraping
-* Backend Python
-* Base de données NoSQL
-* Frontend interactif
-* Dockerisation
-
-Ce type d’architecture est proche de ce qu’on retrouve dans de vrais projets data en production.
+Il constitue une chaîne complète de traitement de données, de la collecte jusqu’à l’affichage.
 
