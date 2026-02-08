@@ -42,35 +42,32 @@ Trois conteneurs sont utilisés :
 projet_rt_movies/
 │
 ├── dashboard/
-│   ├── app.py                 # Application web Flask / Dash
-│   ├── requirements.txt       # Dépendances Python du dashboard
+│   ├── app.py                # Application web Flask/Dash
+│   ├── requirements.txt      # Dépendances Python du dashboard
 │   ├── static/
-│   │   ├── styles.css         # Styles CSS
-│   │   └── app.js             # Scripts JS (Plotly, interactions)
+│   │   ├── styles.css        # Styles CSS
+│   │   └── app.js            # Scripts JS (Plotly, interactions)
 │   └── templates/
-│       └── index.html         # Page principale
+│       └── index.html        # Page principale
 │
 ├── scraper/
-│   ├── spiders/
-│   │   └── movies_2025.py     # Spider Scrapy Rotten Tomatoes
-│   └── requirements.txt       # Dépendances du scraper
+│   └── spiders/
+│       └── movies_2025.py    # Spider Scrapy Rotten Tomatoes
 │
 ├── docs/
-│   └── images/                # Captures d’écran du dashboard
+│   └── images/               # Captures d’écran du dashboard
 │
-├── docker-compose.yml         # Orchestration des containers
-├── requirements.txt           # Dépendances globales
-└── README.md                  # Documentation du projet
-
----
+├── docker-compose.yml        # Orchestration des containers
+├── requirements.txt          # Dépendances globales
+└── README.md                 # Documentation du projet
 
 ##  Comment lancer le projet
 
-1️⃣ Cloner le repository
+1. Cloner le repository
 git clone https://github.com/LucasWu91/projet_rt_movies.git
 cd projet_rt_movies
 
-2️⃣ Vérifier la structure
+2. ️ Vérifier la structure
 ls
 
 
@@ -83,7 +80,7 @@ requirements.txt
 README.md
 
 
-3️⃣ Prérequis
+3. Prérequis
 
 Installer :
 
