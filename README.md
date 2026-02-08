@@ -59,39 +59,72 @@ L’interface est ensuite accessible à l’adresse :
 
 ---
 
-##  Résultats obtenus
+##  Résultats et visualisation des données
 
-Le dashboard constitue la seconde partie centrale du projet. Il exploite directement les données collectées par le spider afin de produire des visualisations interactives permettant d’analyser les films sortis en 2025.
+###  Interface du dashboard
 
-### Fonctionnement technique
+Le projet inclut un dashboard web interactif permettant d’explorer les données scrapées depuis Rotten Tomatoes.
 
-**Connexion à la base de données**
-L’application web se connecte automatiquement à la même base MongoDB que celle utilisée par le scraper. Elle récupère les films stockés dans la collection `movies`, contenant notamment le titre, le score critique et le score spectateur.
+Le dashboard constitue la seconde partie du projet après le scraping.  
+Il utilise les données stockées dans MongoDB pour générer des visualisations dynamiques accessibles via un navigateur.
 
-**Récupération et traitement des données**
-Les données sont extraites depuis MongoDB puis organisées et triées afin de pouvoir être utilisées pour les visualisations. Les films sont notamment analysés selon leurs scores critiques (Tomatometer) et leurs scores spectateurs (Audience Score).
+---
 
-**Création des visualisations**
-Plusieurs graphiques sont générés à partir des données récupérées. Le dashboard permet notamment d’afficher :
+##  Fonctionnement technique du dashboard
 
-* la distribution des scores critiques sous forme d’histogramme,
-* la distribution des scores spectateurs,
-* une vue globale permettant de comparer la perception des films par la critique et par le public.
+###  Initialisation et configuration
 
-Ces graphiques offrent une lecture rapide et intuitive des tendances sur les films de 2025.
+Le script se connecte à la même base de données MongoDB que celle utilisée par le scraper afin de récupérer les films enregistrés.
 
-**Interface utilisateur**
-L’interface web permet de naviguer facilement entre différentes vues :
+---
 
-* une page d’aperçu général,
-* des graphiques statistiques,
-* une liste des films scrapés.
+###  Récupération des données
 
-Les données sont chargées dynamiquement depuis le backend, ce qui permet une mise à jour automatique si la base MongoDB évolue.
+Les données sont chargées depuis la collection `movies` :
 
-**Exécution de l’application**
-L’application fonctionne via un serveur web local lancé dans un conteneur Docker. L’utilisateur peut ainsi accéder aux visualisations directement depuis son navigateur et interagir avec les données collectées.
+- titre  
+- score critiques (Tomatometer)  
+- score audience  
+- URL du film  
 
+Les films sont ensuite triés par score pour permettre l’analyse et l’affichage des meilleurs résultats.
+
+---
+
+###  Création des visualisations
+
+Les graphiques sont générés côté front avec JavaScript / Plotly :
+
+- Histogramme des scores Tomatometer  
+- Histogramme des scores Audience  
+- Distribution des notes  
+- Top 10 des films les mieux notés  
+
+---
+
+### ️ Interface utilisateur
+
+L’interface est organisée en onglets :
+
+- Vue d’ensemble  
+- Graphiques  
+- Films  
+
+Cela permet une navigation fluide entre les différentes analyses.
+
+---
+
+##  Aperçu du dashboard
+
+### Analyse des distributions des scores
+
+![Analyse des scores](docs/images/dashboard_scores.png)
+
+---
+
+### Top 10 des films
+
+![Top 10 films](docs/images/dashboard_top10.png)
 ---
 
 ## ️ Difficultés rencontrées
@@ -112,7 +145,6 @@ Cela venait d’une mauvaise configuration de la connexion entre le backend Flas
 
 Le projet pourrait être enrichi de plusieurs façons :
 
-* ajouter un moteur de recherche par film
 * ajouter des filtres par score
 * scraper d’autres années
 * ajouter des statistiques comparatives plus avancées
