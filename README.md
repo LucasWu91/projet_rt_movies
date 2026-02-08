@@ -118,7 +118,7 @@ Cela permet une navigation fluide entre les différentes analyses.
 
 ### Analyse des distributions des scores
 
-![Analyse des scores](docs/images/dashboard_scores.png)
+![Analyse des scores](docs/images/dashboard_overview.png)
 
 ---
 
