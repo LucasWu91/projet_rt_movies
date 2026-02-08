@@ -39,9 +39,58 @@ Trois conteneurs sont utilisés :
 * Scraper (Scrapy)
 * Dashboard (Flask + JavaScript)
 
+projet_rt_movies/
+│
+├── dashboard/
+│   ├── app.py                 # Application web Flask / Dash
+│   ├── requirements.txt       # Dépendances Python du dashboard
+│   ├── static/
+│   │   ├── styles.css         # Styles CSS
+│   │   └── app.js             # Scripts JS (Plotly, interactions)
+│   └── templates/
+│       └── index.html         # Page principale
+│
+├── scraper/
+│   ├── spiders/
+│   │   └── movies_2025.py     # Spider Scrapy Rotten Tomatoes
+│   └── requirements.txt       # Dépendances du scraper
+│
+├── docs/
+│   └── images/                # Captures d’écran du dashboard
+│
+├── docker-compose.yml         # Orchestration des containers
+├── requirements.txt           # Dépendances globales
+└── README.md                  # Documentation du projet
+
 ---
 
 ##  Comment lancer le projet
+
+1️⃣ Cloner le repository
+git clone https://github.com/LucasWu91/projet_rt_movies.git
+cd projet_rt_movies
+
+2️⃣ Vérifier la structure
+ls
+
+
+Vous devriez voir :
+
+dashboard/
+scraper/
+docker-compose.yml
+requirements.txt
+README.md
+
+
+3️⃣ Prérequis
+
+Installer :
+
+Docker Desktop
+
+Git
+
 
 Une fois Docker installé, il suffit de se placer à la racine du projet et d’exécuter :
 
