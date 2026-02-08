@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotten Tomatoes 2025 - Dashboard</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="bg-animation"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🎬</span>
+                    <h1 class="logo-text">RT 2025</h1>
+                </div>
+                <nav class="nav">
+                    <a href="#overview" class="nav-link active">Vue d'ensemble</a>
+                    <a href="#charts" class="nav-link">Graphiques</a>
+                    <a href="#movies" class="nav-link">Films</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            
+            <!-- Hero Section -->
+            <section class="hero" id="overview">
+                <div class="hero-content">
+                    <h2 class="hero-title">Les meilleurs films de 2025</h2>
+                    <p class="hero-subtitle">Analyse complète des films certifiés Fresh</p>
+                </div>
+            </section>
+
+            <!-- Stats Grid -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card" data-animate>
+                        <div class="stat-icon">🎭</div>
+                        <div class="stat-value" id="totalMovies">-</div>
+                        <div class="stat-label">Films recensés</div>
+                    </div>
+                    
+                    <div class="stat-card" data-animate>
+                        <div class="stat-icon">🍅</div>
+                        <div class="stat-value" id="avgTomatometer">-</div>
+                        <div class="stat-label">Tomatometer moyen</div>
+                    </div>
+                    
+                    <div class="stat-card" data-animate>
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-value" id="avgAudience">-</div>
+                        <div class="stat-label">Score audience moyen</div>
+                    </div>
+                    
+                    <div class="stat-card" data-animate>
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-value" id="maxScore">-</div>
+                        <div class="stat-label">Score maximum</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section" id="charts">
+                <h2 class="section-title">Analyse des données</h2>
+                
+                <div class="charts-grid">
+                    <!-- Distribution Chart -->
+                    <div class="chart-card" data-animate>
+                        <h3 class="chart-title">Distribution des scores Tomatometer</h3>
+                        <div class="chart-container">
+                            <canvas id="tomatometerChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Audience Chart -->
+                    <div class="chart-card" data-animate>
+                        <h3 class="chart-title">Distribution des scores audience</h3>
+                        <div class="chart-container">
+                            <canvas id="audienceChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Top Movies Chart -->
+                    <div class="chart-card chart-card-wide" data-animate>
+                        <h3 class="chart-title">Top 10 des films</h3>
+                        <div class="chart-container">
+                            <canvas id="topMoviesChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Comparison Scatter -->
+                    <div class="chart-card chart-card-wide" data-animate>
+                        <h3 class="chart-title">Tomatometer vs Score audience</h3>
+                        <div class="chart-container">
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Movies Table Section -->
+            <section class="movies-section" id="movies">
+                <h2 class="section-title">Catalogue des films</h2>
+                
+                <!-- Search and Filter -->
+                <div class="controls">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" class="search-input" placeholder="Rechercher un film...">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                    
+                    <div class="filter-controls">
+                        <label class="filter-label">Trier par:</label>
+                        <select id="sortSelect" class="sort-select">
+                            <option value="tomatometer-desc">Tomatometer (desc)</option>
+                            <option value="tomatometer-asc">Tomatometer (asc)</option>
+                            <option value="audience-desc">Audience (desc)</option>
+                            <option value="audience-asc">Audience (asc)</option>
+                            <option value="title">Titre (A-Z)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Movies Grid -->
+                <div class="movies-grid" id="moviesGrid">
+                    <!-- Movies will be loaded here -->
+                    <div class="loading">Chargement des films...</div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Dashboard Rotten Tomatoes 2025 | Données scrapées depuis <a href="https://editorial.rottentomatoes.com/guide/best-2025-movies-every-certified-fresh/" target="_blank">Rotten Tomatoes</a></p>
+        </div>
+    </footer>
+
+    <!-- Script -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
