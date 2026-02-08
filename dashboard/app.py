@@ -93,7 +93,7 @@ def get_distribution():
             {
                 '$bucket': {
                     'groupBy': '$tomatometer',
-                    'boundaries': [0, 20, 40, 60, 80, 100],
+                    'boundaries': [0, 20, 40, 60, 80, 100, 101],
                     'default': 'Other',
                     'output': {
                         'count': {'$sum': 1}
@@ -109,7 +109,7 @@ def get_distribution():
             {
                 '$bucket': {
                     'groupBy': '$audience_score',
-                    'boundaries': [0, 20, 40, 60, 80, 100],
+                    'boundaries': [0, 20, 40, 60, 80, 100, 101],
                     'default': 'Other',
                     'output': {
                         'count': {'$sum': 1}

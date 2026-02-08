@@ -120,67 +120,54 @@ async function loadCharts() {
     }
 }
 
-// Create distribution chart
 function createDistributionChart(canvasId, data, label) {
-    const ctx = document.getElementById(canvasId);
-    
-    const labels = data.map(d => {
-        const range = d._id;
-        if (range < 20) return '0-20%';
-        if (range < 40) return '20-40%';
-        if (range < 60) return '40-60%';
-        if (range < 80) return '60-80%';
-        return '80-100%';
-    });
-    
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: `Nombre de films - ${label}`,
-                data: data.map(d => d.count),
-                backgroundColor: 'rgba(255, 90, 95, 0.7)',
-                borderColor: 'rgba(255, 90, 95, 1)',
-                borderWidth: 2,
-                borderRadius: 8,
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(26, 26, 46, 0.95)',
-                    titleColor: '#e8e8f0',
-                    bodyColor: '#a8a8b8',
-                    borderColor: '#ff5a5f',
-                    borderWidth: 1,
-                    padding: 12,
-                    displayColors: false,
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        color: 'rgba(42, 42, 62, 0.5)',
-                    },
-                    ticks: {
-                        stepSize: 10
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            }
-        }
-    });
+  const ctx = document.getElementById(canvasId);
+
+  // 1) Fonction de binning (100% séparé)
+  const binLabel = (range) => {
+    if (range === 100) return "100%";
+    if (range < 20) return "0-20%";
+    if (range < 40) return "20-40%";
+    if (range < 60) return "40-60%";
+    if (range < 80) return "60-80%";
+    return "80-100%"; // ici : 80..99
+  };
+
+  // 2) Agréger les counts par label (évite les doublons de labels)
+  const counts = {};
+  for (const d of data) {
+    const lbl = binLabel(d._id);
+    counts[lbl] = (counts[lbl] || 0) + d.count;
+  }
+
+  // 3) Ordre fixe
+  const ordered = ["0-20%", "20-40%", "40-60%", "60-80%", "80-100%", "100%"];
+  const labels = ordered.filter((l) => counts[l] != null);
+  const values = labels.map((l) => counts[l]);
+
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{
+        label: `Nombre de films - ${label}`,
+        data: values,
+        backgroundColor: "rgba(255, 90, 95, 0.7)",
+        borderColor: "rgba(255, 90, 95, 1)",
+        borderWidth: 2,
+        borderRadius: 8,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true },
+        x: { grid: { display: false } },
+      },
+    },
+  });
 }
 
 // Create top movies chart
